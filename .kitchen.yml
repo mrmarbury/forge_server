@@ -31,8 +31,6 @@ suites:
     attributes:
       forge_server:
         installer:
-          version: "1.11.2-13.20.1.2386"
-        installed:
           version: "1.12.2-14.23.2.2611"
   - name: with_map
     run_list:
