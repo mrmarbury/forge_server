@@ -5,7 +5,7 @@
 Chef Cookbook to manage a Forge-Server installation on FreeBSD.
 
 **INFO:** This is a detached fork of my other Cookbook [ftb_server](https://github.com/mrmarbury/ftb_server) which works
-great for installing the server portion of a FTB ModPack. This Cookbook however focuses on your very own
+great for installing and maintaining the server portion of a FTB ModPack. This Cookbook however focuses on your very own
 Forge installation with selection of mods. 
 
 ## Requirements
