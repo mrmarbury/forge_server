@@ -236,3 +236,5 @@ service rc_script_name do
   supports start: true, stop: true, restart: true
   action (node['forge_server']['start_server'])? [:enable, :start] : [:disable]
 end
+
+include_recipe 'forge_server::auto_restart'
