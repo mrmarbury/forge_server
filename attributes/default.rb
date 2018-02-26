@@ -1,0 +1,94 @@
+default['forge_server']['openjdk_version'] = 8
+default['forge_server']['packages'] = %W( openjdk#{node['forge_server']['openjdk_version']} tmux curl )
+
+default['forge_server']['install_base'] = 'Server'
+default['forge_server']['addon_dir'] = '.Addon'
+
+default['forge_server']['rc_d']['name'] = 'ftbserver'
+default['forge_server']['rc_d']['dir'] = '/usr/local/etc/rc.d'
+
+default['forge_server']['user']['name'] = 'ftb'
+default['forge_server']['user']['group'] = 'ftb'
+default['forge_server']['user']['shell'] = '/bin/sh'
+default['forge_server']['user']['home'] = '/usr/local/ftb'
+
+# Every file in this array will be symlinked to the FTB dir
+default['forge_server']['addon_config']['files'] = %w( whitelist.json ops.json banned-ips.json banned-players.json )
+
+## We have to accept the Minecraft eula to be able to start the FTB Server
+default['forge_server']['eula']['do_accept'] = true
+
+default['forge_server']['settings_local_sh']['java_cmd'] = 'java'
+default['forge_server']['settings_local_sh']['xms'] = '2G'
+default['forge_server']['settings_local_sh']['xmx'] = '8G'
+default['forge_server']['settings_local_sh']['permgen_size'] = '256M'
+default['forge_server']['settings_local_sh']['java_parameters'] = %w(
+                                                                    -XX:+UseParNewGC
+                                                                    -XX:+CMSIncrementalPacing
+                                                                    -XX:+CMSClassUnloadingEnabled
+                                                                    -XX:ParallelGCThreads=2
+                                                                    -XX:MinHeapFreeRatio=5
+                                                                    -XX:MaxHeapFreeRatio=10
+                                                                  )
+# if false, the server might not start because of changed blocks during version upgrade
+# you may leave this false but then you have to connect to the server console and /fml confirm manually
+default['forge_server']['fml']['add_confirm_option'] = true
+default['forge_server']['fml']['confirm_option'] = '-Dmfl.queryResult=confirm'
+
+default['forge_server']['server_properties']['spawn_protection'] = 16
+default['forge_server']['server_properties']['max_tick_time'] = 60000
+default['forge_server']['server_properties']['generator_settings'] = ''
+default['forge_server']['server_properties']['force_gamemode'] = true
+default['forge_server']['server_properties']['allow_nether'] = true
+default['forge_server']['server_properties']['gamemode'] = 0
+default['forge_server']['server_properties']['broadcast_console_to_ops'] = true
+default['forge_server']['server_properties']['enable_query'] = false
+default['forge_server']['server_properties']['player_idle_timeout'] = 0
+default['forge_server']['server_properties']['difficulty'] = 1
+default['forge_server']['server_properties']['spawn_monsters'] = true
+default['forge_server']['server_properties']['op_permission_level'] = 4
+default['forge_server']['server_properties']['announce_player_achievements'] = true
+default['forge_server']['server_properties']['pvp'] = true
+default['forge_server']['server_properties']['snooper_enabled'] = true
+default['forge_server']['server_properties']['level_type'] = 'BIOMESOP'
+default['forge_server']['server_properties']['hardcore'] = false
+default['forge_server']['server_properties']['enable_command_block'] = false
+default['forge_server']['server_properties']['max_players'] = 20
+default['forge_server']['server_properties']['network_compression_threshold'] = 256
+default['forge_server']['server_properties']['resource_pack_sha1'] = ''
+default['forge_server']['server_properties']['max_world_size'] = 29999984
+default['forge_server']['server_properties']['server_port'] = 25565
+default['forge_server']['server_properties']['texture_pack'] = ''
+default['forge_server']['server_properties']['server_ip'] = node['ipaddress']
+default['forge_server']['server_properties']['spawn_npcs'] = true
+default['forge_server']['server_properties']['allow_flight'] = true
+default['forge_server']['server_properties']['level_name'] = 'world'
+default['forge_server']['server_properties']['view_distance'] = 12
+default['forge_server']['server_properties']['resource_pack'] = ''
+default['forge_server']['server_properties']['spawn_animals'] = true
+default['forge_server']['server_properties']['white_list'] = true
+default['forge_server']['server_properties']['generate_structures'] = true
+default['forge_server']['server_properties']['online_mode'] = true
+default['forge_server']['server_properties']['max_build_height'] = 256
+default['forge_server']['server_properties']['level_seed'] = '2323115871908605002'
+# Minecraft will escape characters like !, = etc so we might as well escape them here to prevent rewrite of the config with every chef run
+default['forge_server']['server_properties']['motd'] = 'Be nice to each other\! NO griefing\!\!'
+default['forge_server']['server_properties']['enable_rcon'] = false
+
+## other options for server.properties, like {'my-property' => 'value', ...}
+default['forge_server']['server_properties']['additional_options'] = {}
+
+## http://ftb.cursecdn.com/FTB2/modpacks/FTBInfinityLite110/1_3_3/FTBInfinityLite110Server.zip
+default['forge_server']['pack']['base_url'] = 'http://ftb.cursecdn.com/FTB2/modpacks'
+default['forge_server']['pack']['name'] = nil
+default['forge_server']['pack']['version'] = nil
+
+default['forge_server']['start_server'] = true
+
+## Set by Cookbook. Do NOT edit!
+default['forge_server']['installed']['pack'] = nil
+default['forge_server']['installed']['version'] = nil
+
+## Don't change these attributes!
+default['forge_server']['pack_base_dir'] = ::File.join node['forge_server']['user']['home'], node['forge_server']['pack']['name']
+default['forge_server']['pack_addon_dir'] = ::File.join node['forge_server']['pack_base_dir'], node['forge_server']['addon_dir']

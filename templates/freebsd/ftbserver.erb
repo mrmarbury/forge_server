@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+# PROVIDE: <%= @forge_name %>
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="<%= @forge_name %>"
+rcvar=<%= @forge_name %>_enable
+
+load_rc_config $name
+
+extra_commands="restart"
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+restart_cmd="${name}_restart"
+
+forge_server_home=<%= @forge_server_home %>
+forge_server_name=<%= @forge_server_name%>
+forge_user=<%= @forge_user %>
+forge_world_name=<%= @forge_world_name %>
+
+eval "${rcvar}=\${${rcvar}:-'NO'}"
+
+<%= @forge_name %>_start() {
+    if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+        echo "Server already running."
+    else
+        echo "Starting ${forge_server_name}..."
+        cd ${forge_server_home}
+        /usr/bin/su ${forge_user} -c "/usr/local/bin/tmux new-session -d -s <%= @forge_name %> \"./ServerStart.sh\"" || exit 5
+
+        i=0
+        while [ $i -lt 15 ]; do
+            i=$(($i + 1))
+            if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+                echo "${forge_server_name} running."
+                break
+            else
+                sleep 1
+            fi
+        done
+
+        if [ $i -ge 10 ]; then
+            echo "ERROR: Server could not be started."
+            /usr/bin/su ${forge_user} -c "/usr/local/bin/tmux kill-session -t <%= @forge_name %>"
+            exit 10
+        fi
+    fi
+}
+
+<%= @forge_name %>_stop() {
+    if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+        echo "Halting ${forge_server_name}."
+        /usr/bin/su ${forge_user} -c "/usr/local/bin/tmux send -t <%= @forge_name %>:0.0 stop \"Enter\""
+
+        i=0
+        while [ $i -lt 15 ]; do
+            i=$(($i + 1))
+            if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+                sleep 1
+            else
+                echo "${forge_server_name} halted."
+                break
+            fi
+        done
+
+        if [ $i -ge 10 ];then
+            echo "ERROR: Server could not be halted."
+            exit 20
+        fi
+    else
+        echo "${forge_server_name} not running."
+    fi
+}
+
+<%= @forge_name %>_restart() {
+        <%= @forge_name %>_stop
+        sleep 5
+        <%= @forge_name %>_start
+}
+
+run_rc_command "$1"
