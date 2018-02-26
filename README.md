@@ -1,3 +1,5 @@
+#**!!! NOT WORKING YET - Do not use or open issues for this one just yet !!!**
+
 # forge_server
 
 Chef Cookbook to manage a Forge-Server installation on FreeBSD.
