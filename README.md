@@ -1,6 +1,6 @@
 # forge_server
 
-Chef Cookbook to manage a "Feed the Beast"-Server installation on FreeBSD.
+Chef Cookbook to manage a Forge-Server installation on FreeBSD.
 
 ## Requirements
 
@@ -19,13 +19,13 @@ Chef Cookbook to manage a "Feed the Beast"-Server installation on FreeBSD.
  
 ## General Info On The How And Why
 
-The FTB-Server installation is devided into three parts:
+The Forge-Server installation is devided into three parts:
 
  1. The user/group and its home-dir
- 2. The FTB-Pack main directory and each version
+ 2. The Modpack main directory and each version
  3. The files/directories that contain world data, backup, and config that are symlinked into each version-dir
  
-An installed FTB-Server will have the following directory structure:
+An installed Forge-Server will have the following directory structure:
 
 ```
 /usr/local/<user>/<pack>
@@ -47,7 +47,7 @@ An installed FTB-Server will have the following directory structure:
                                \_ backups/
                                \_ ...
                                
-/usr/local/etc/rc.d/ftbserver
+/usr/local/etc/rc.d/Forgeserver
 ```
 
 The JSON-Files cannot be delivered easily as templates since they are updated through Minecraft. 
@@ -63,22 +63,22 @@ no technical purpose in this Cookbook.
 ### General
 
  - `node['forge_server']['openjdk_version']` - Which OpenJDK version to install. Default: `8`
- - `node['forge_server']['packages']` - Array of packages that have to be installed prior to rolling out the FTB server. Default: `%W( openjdk#{node['forge_server']['openjdk_version']} tmux curl )`
+ - `node['forge_server']['packages']` - Array of packages that have to be installed prior to rolling out the Forge server. Default: `%W( openjdk#{node['forge_server']['openjdk_version']} tmux curl )`
  - `node['forge_server']['install_base']` - Base directory name for an installation. Default: `'Server'`
  - `node['forge_server']['addon_dir']` - Name of the directory that will contain all symlinked files. Default: `'.Addon'`
  - `node['forge_server']['start_server']` - Whether to enable and start the server or not. Default: `true`
  
 ### rc-Script
 
- - `node['forge_server']['rc_d']['name']` - Name of the service. Default: `'ftbserver'`
+ - `node['forge_server']['rc_d']['name']` - Name of the service. Default: `'Forgeserver'`
  - `node['forge_server']['rc_d']['path']` - Path to the rc-script. Default: `'/usr/local/etc/rc.d'`
 
 ### User/Group
 
- - `node['forge_server']['user']['name']` - The system user. Default: `'ftb'`
- - `node['forge_server']['user']['group']` - The user's system group. Default: `'ftb'`
+ - `node['forge_server']['user']['name']` - The system user. Default: `'Forge'`
+ - `node['forge_server']['user']['group']` - The user's system group. Default: `'Forge'`
  - `node['forge_server']['user']['shell']` - Login shell of the system user. Default: `'/bin/sh'`
- - `node['forge_server']['user']['home']` - Home directory of the system user. This is also where the FTB installations will be made. Default: `'/usr/local/ftb'`
+ - `node['forge_server']['user']['home']` - Home directory of the system user. This is also where the Forge installations will be made. Default: `'/usr/local/Forge'`
 
 ### Addon Config
 
@@ -88,7 +88,7 @@ no technical purpose in this Cookbook.
 
 ### eula.txt-File
 
- - `node['forge_server']['eula']['do_accept']` - We have to accept the Minecraft eula to be able to start the FTB Server. If you set this to `false` then the server won't start. Default `true`
+ - `node['forge_server']['eula']['do_accept']` - We have to accept the Minecraft eula to be able to start the Forge Server. If you set this to `false` then the server won't start. Default `true`
 
 ### settings-local.sh-File
 
@@ -164,9 +164,9 @@ values and a hint will be shown next to the attribute
 
 ### Pack Related
 
- - `node['forge_server']['pack']['base_url']` - Base URL where the FTB Server packs can be found. Default: `'http://ftb.cursecdn.com/FTB2/modpacks'`
- - `node['forge_server']['pack']['name']` - FTB modpack name. Has to be equal to the packs subdirectory on the download server. Must be set on a role/environment. Default: `nil`
- - `node['forge_server']['pack']['version']` - Version of the FTB modpack in the form `X.Y.Z`. Must be set in a role/environment. Default: `nil`
+ - `node['forge_server']['pack']['base_url']` - Base URL where the Forge Server packs can be found. Default: `'http://Forge.cursecdn.com/Forge2/modpacks'`
+ - `node['forge_server']['pack']['name']` - Forge modpack name. Has to be equal to the packs subdirectory on the download server. Must be set on a role/environment. Default: `nil`
+ - `node['forge_server']['pack']['version']` - Version of the Forge modpack in the form `X.Y.Z`. Must be set in a role/environment. Default: `nil`
 
  
 ### mod_dynmap-Recipe
@@ -192,7 +192,7 @@ values and a hint will be shown next to the attribute
  override_attributes({
    "forge_server" => {
        "pack" => {
-           "name" => "FTBInfinityLite110",
+           "name" => "ForgeInfinityLite110",
            "version" => "1.3.3"
        }
    }
@@ -223,7 +223,7 @@ include_recipe 'forge_server::default'
      override_attributes({
        "forge_server" => {
            "pack" => {
-               "name" => "FTBInfinityLite110",
+               "name" => "ForgeInfinityLite110",
                "version" => "1.3.3"
            }
        }

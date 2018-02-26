@@ -16,10 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-## Installing FTB Server
+## Installing Forge Server
 #
 
-Chef::Resource::Execute.send(:include, Ftb::Helper)
+Chef::Resource::Execute.send(:include, Forge::Helper)
+
+java_cmd = node['forge_server']['settings_local_sh']['java_cmd']
 
 forge_group = node['forge_server']['user']['group']
 forge_user = node['forge_server']['user']['name']
@@ -27,21 +29,25 @@ forge_home = node['forge_server']['user']['home']
 
 install_base = node['forge_server']['install_base']
 
-pack_name = node['forge_server']['pack']['name']
+pack_name = node['forge_server']['name']
 
-pack_base_dir = node['forge_server']['pack_base_dir']
-pack_addon_dir = node['forge_server']['pack_addon_dir']
+base_dir = node['forge_server']['base_dir']
+addon_dir = node['forge_server']['addon_dir']
 
-pack_version = node['forge_server']['pack']['version']
-pack_version_dir = "#{install_base}.#{pack_version}"
+forge_version = node['forge_server']['installer']['version']
+pack_version_dir = "#{install_base}.#{forge_version}"
 
-pack_version_server_dir = ::File.join pack_base_dir, pack_version_dir
-pack_server_link_dir = ::File.join pack_base_dir, install_base
+pack_version_server_dir = ::File.join base_dir, pack_version_dir
+pack_server_link_dir = ::File.join base_dir, install_base
 
 level_name = node['forge_server']['server_properties']['level_name']
 
-rc_script = node['forge_server']['rc_d']['name']
-init_script = ::File.join node['forge_server']['rc_d']['dir'], rc_script
+rc_script_name = node['forge_server']['rc_d']['name']
+rc_script_path = ::File.join node['forge_server']['rc_d']['dir'], rc_script_name
+
+forge_jar_base = 'forge-' + forge_version
+forge_installer_jar = forge_jar_base + '-installer.jar'
+forge_universal_jar = forge_jar_base + '-universal.jar'
 
 ## These resources will be executed at compile time. So in a wrapper-Cookbook .Addon is present when needed
 group forge_group do
@@ -56,7 +62,7 @@ user forge_user do
   action :nothing
 end.run_action :create
 
-[pack_base_dir, pack_version_server_dir, pack_addon_dir].each do |pdir|
+[base_dir, pack_version_server_dir, addon_dir].each do |pdir|
   directory pdir do
     owner forge_user
     group forge_group
@@ -68,21 +74,21 @@ end
 
 ## END of compile time resources ##
 
-node['forge_server']['packages'].each do |pkg|
+node['forge_server']['system_packages'].each do |pkg|
   package pkg
 end
 
 execute 'send_stop_to_forge_server_before_pack_update' do
-  command "#{init_script} stop"
-  only_if { ::File.exists?(init_script) && forge_is_upgradeable(pack_version, pack_server_link_dir)}
+  command "#{rc_script_path} stop"
+  only_if { ::File.exists?(rc_script_path) && forge_is_upgradeable(forge_version, pack_server_link_dir)}
 end
 
-template init_script do
+template rc_script_path do
   user 'root'
   group 'wheel'
   mode '555'
   variables(
-      forge_name: rc_script,
+      forge_name: rc_script_name,
       forge_server_home: pack_version_server_dir,
       forge_server_name: pack_name,
       forge_user: forge_user,
@@ -95,34 +101,37 @@ link pack_server_link_dir do
   to pack_version_server_dir
 end
 
-## making sure the linkable dirs for persistent data exist and are linked to the Server dir
-[node['forge_server']['server_properties']['level_name'], 'backups'].each do |addon_dir|
-  pack_addon_path = ::File.join(pack_addon_dir, addon_dir)
+# Creating the initial world dir and symlink
+world_name = node['forge_server']['server_properties']['level_name']
+world_addon_path = ::File.join(addon_dir, world_name)
 
-  directory pack_addon_path do
-    owner forge_user
-    group forge_group
-    recursive true
-    mode '750'
-  end
-
-  link ::File.join(pack_version_server_dir, addon_dir) do
-    to pack_addon_path
-  end
+directory world_addon_path do
+  owner forge_user
+  group forge_group
+  recursive true
+  mode '750'
+  action :create
 end
 
-pack_url = node['forge_server']['pack']['base_url'] + '/' +
-           pack_name + '/' +
-           pack_version.tr('.', '_') + '/' +
-           pack_name + 'Server.zip'
+link ::File.join(pack_version_server_dir, world_name) do
+  to world_addon_path
+end
 
-poise_archive pack_url do
-  destination pack_version_server_dir
-  user forge_user
+forge_installer_url = node['forge_server']['installer']['base_url'] + '/' + forge_version + '/' + forge_installer_jar
+
+remote_file ::File.join pack_version_server_dir, forge_installer_jar do
+  source forge_installer_url
+  owner forge_user
   group forge_group
-  keep_existing true
-  strip_components 0
-  not_if { ::File.exists?(::File.join(pack_version_server_dir, 'ServerStart.sh')) }
+  mode '0750'
+  action :create
+end
+
+bash "Run #{forge_installer_jar}" do
+  code "#{java_cmd} -jar #{forge_installer_jar} #{node['forge_server']['installer']['options']}"
+  creates ::File.join pack_version_server_dir, forge_universal_jar
+  cwd pack_version_server_dir
+  action :run
 end
 
 template ::File.join pack_version_server_dir, 'eula.txt' do
@@ -161,7 +170,7 @@ template ::File.join pack_version_server_dir, 'server.properties' do
       enable_command_block: node['forge_server']['server_properties']['enable_command_block'],
       max_players: node['forge_server']['server_properties']['max_players'],
       network_compression_threshold: node['forge_server']['server_properties']['network_compression_threshold'],
-      resource_pack_sha1: node['forge_server']['server_properties']['resource_pack_sha1'],
+      resource_pack_sha1: node['forge_server']['server_properties']['resource_pack_sha1hash'],
       max_world_size: node['forge_server']['server_properties']['max_world_size'],
       server_port: node['forge_server']['server_properties']['server_port'],
       texture_pack: node['forge_server']['server_properties']['texture_pack'],
@@ -170,14 +179,14 @@ template ::File.join pack_version_server_dir, 'server.properties' do
       allow_flight: node['forge_server']['server_properties']['allow_flight'],
       level_name: level_name,
       view_distance: node['forge_server']['server_properties']['view_distance'],
-      resource_pack: node['forge_server']['server_properties']['resource_pack'],
+      resource_pack: node['forge_server']['server_properties']['resource_pack_url'],
       spawn_animals: node['forge_server']['server_properties']['spawn_animals'],
       white_list: node['forge_server']['server_properties']['white_list'],
       generate_structures: node['forge_server']['server_properties']['generate_structures'],
       online_mode: node['forge_server']['server_properties']['online_mode'],
       max_build_height: node['forge_server']['server_properties']['max_build_height'],
       level_seed: node['forge_server']['server_properties']['level_seed'],
-      motd: "v#{pack_version} - #{pack_name} -\\=- #{node['forge_server']['server_properties']['motd']}",
+      motd: "v#{forge_version} - #{pack_name} -\\=- #{node['forge_server']['server_properties']['motd']}",
       enable_rcon: node['forge_server']['server_properties']['enable_rcon'],
       additional_options: node['forge_server']['server_properties']['additional_options']
   )
@@ -196,7 +205,8 @@ template ::File.join pack_version_server_dir, 'settings-local.sh' do
   group forge_group
   mode '750'
   variables(
-      java_cmd: node['forge_server']['settings_local_sh']['java_cmd'],
+      forge_universal_jar: forge_universal_jar,
+      java_cmd: java_cmd,
       xms: node['forge_server']['settings_local_sh']['xms'],
       xmx: node['forge_server']['settings_local_sh']['xmx'],
       permgen_size: node['forge_server']['settings_local_sh']['permgen_size'],
@@ -205,19 +215,22 @@ template ::File.join pack_version_server_dir, 'settings-local.sh' do
 end
 
 node['forge_server']['addon_config']['files'].each do |file|
-  afile = ::File.join pack_addon_dir, file
+  afile = ::File.join addon_dir, file
   link ::File.join pack_version_server_dir, file do
     to afile
     only_if { ::File.exists? afile }
   end
 end
 
-## Making ServerStart.sh executable
-file ::File.join(pack_version_server_dir, 'ServerStart.sh') do
+cookbook_file ::File.join(pack_version_server_dir, 'ServerStart.sh') do
+  source 'ServerStart.sh'
+  owner forge_user
+  group forge_group
   mode '750'
+  action :create
 end
 
-service rc_script do
+service rc_script_name do
   supports start: true, stop: true, restart: true
   action (node['forge_server']['start_server'])? [:enable, :start] : [:disable]
 end

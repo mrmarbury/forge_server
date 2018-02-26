@@ -30,9 +30,8 @@ suites:
         - test/recipes
     attributes:
       forge_server:
-        pack:
-          name: "FTBInfinityLite110"
-          version: "1.4.1"
+        installer:
+          version: "1.12.2-14.23.2.2611"
   - name: with_map
     run_list:
       - recipe[forge_server::mod_dynmap]
@@ -41,6 +40,5 @@ suites:
         - test/recipes
     attributes:
       forge_server:
-        pack:
-          name: "FTBHorizonsIII"
-          version: "1.0.0"
+        installer:
+          version: "1.12.2-14.23.2.2611"
