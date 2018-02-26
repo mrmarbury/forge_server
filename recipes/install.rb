@@ -80,7 +80,7 @@ end
 
 execute 'send_stop_to_forge_server_before_pack_update' do
   command "#{rc_script_path} stop"
-  only_if { ::File.exists?(rc_script_path) && forge_is_upgradeable(forge_version, pack_server_link_dir)}
+  only_if { ::File.exists?(rc_script_path) && forge_is_upgradeable(forge_version, node['forge_server']['installed']['version'])}
 end
 
 template rc_script_path do
@@ -131,6 +131,8 @@ bash "Run #{forge_installer_jar}" do
   code "#{java_cmd} -jar #{forge_installer_jar} #{node['forge_server']['installer']['options']}"
   creates ::File.join pack_version_server_dir, forge_universal_jar
   cwd pack_version_server_dir
+  user forge_user
+  group forge_group
   action :run
 end
 

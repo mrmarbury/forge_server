@@ -27,7 +27,7 @@ include_recipe 'forge_server::install'
 
 ruby_block 'set_version_info' do
   block do
-    node.set['forge_server']['installed']['version'] = node['forge_server']['version']
+    node.set['forge_server']['installed']['version'] = node['forge_server']['installer']['version']
   end
 end
 

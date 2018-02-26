@@ -21,7 +21,6 @@ default['forge_server']['eula']['do_accept'] = true
 default['forge_server']['settings_local_sh']['java_cmd'] = 'java'
 default['forge_server']['settings_local_sh']['xms'] = '2G'
 default['forge_server']['settings_local_sh']['xmx'] = '8G'
-default['forge_server']['settings_local_sh']['permgen_size'] = '256M'
 default['forge_server']['settings_local_sh']['java_parameters'] = %w(
                                                                     -XX:+UseParNewGC
                                                                     -XX:+CMSIncrementalPacing

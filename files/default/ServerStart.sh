@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/local/bin/bash
 # This file was taken from the Feed the Beast guys and adapted
 # to my needs (https://feed-the-beast.com)
 ###################
@@ -14,10 +14,9 @@ if [ x${FORGE_VERBOSE} = xyes ]; then
     set -x
 fi
 
-# Read settings defined by local server admin
-if [ -f settings-local.sh ]; then
-    . ./settings-local.sh
-fi
+
+. ./settings-local.sh
+
 
 # cleaner code
 eula_false() {
@@ -27,7 +26,7 @@ eula_false() {
 
 # cleaner code 2
 start_server() {
-    "$JAVACMD" -server -Xms${MIN_RAM} -Xmx${MAX_RAM} -XX:PermSize=${PERMGEN_SIZE} ${JAVA_PARAMETERS} -jar ${FORGE_UNIVERSAL_JAR} nogui
+    "$JAVACMD" -server -Xms${MIN_RAM} -Xmx${MAX_RAM} ${JAVA_PARAMETERS} -jar ${FORGE_UNIVERSAL_JAR} nogui
 }
 
 # check eula.txt
