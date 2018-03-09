@@ -13,8 +13,10 @@ verifier:
   name: inspec
 
 platforms:
-  - name: freebsd-10.3
+  - name: generic/freebsd11
     driver:
+      network:
+        - ["forwarded_port", {guest: 25565, host: 25565}]
       synced_folders: 
        - [".", "/vagrant", "disabled: true"]
       customize:
@@ -23,18 +25,9 @@ platforms:
 
 suites:
   - name: default
+    data_bags_path: "test/integration/default/data_bags"
     run_list:
       - recipe[forge_server::default]
-    verifier:
-      inspec_tests:
-        - test/recipes
-    attributes:
-      forge_server:
-        installer:
-          version: "1.12.2-14.23.2.2611"
-  - name: with_map
-    run_list:
-      - recipe[forge_server::mod_dynmap]
     verifier:
       inspec_tests:
         - test/recipes

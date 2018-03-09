@@ -18,52 +18,23 @@
 
 include_recipe 'forge_server::default'
 
-install_base = node['forge_server']['install_base']
+version = node['forge_server']['installer']['version']
+name = node['forge_server']['name']
+addon_path = node['forge_server']['addon_dir'] + '/' + node['forge_server']['mods']['listing']['Dynmap']['server_addon_dir']
 
-pack_base_dir = node['forge_server']['pack_base_dir']
-pack_version = node['forge_server']['pack']['version']
-pack_version_dir = "#{install_base}.#{pack_version}"
-pack_version_server_dir = ::File.join pack_base_dir, pack_version_dir
-pack_addon_dir = node['forge_server']['pack_addon_dir']
-
-pack_version = node['forge_server']['pack']['version']
-pack_name = node['forge_server']['pack']['name']
-
-mods_dir = ::File.join pack_version_server_dir, 'mods'
 forge_group = node['forge_server']['user']['group']
 forge_user = node['forge_server']['user']['name']
 
 rc_script = node['forge_server']['rc_d']['name']
 
-remote_file ::File.join mods_dir, 'dynmap.jar' do
-  source node['forge_server']['mod_dynmap']['jar_url']
-  owner forge_user
-  group forge_group
-  mode '0644'
-  action :create
-  notifies :restart, "service[#{rc_script}]", :delayed if node['forge_server']['mod_dynmap']['restart_on_update']
-end
-
-dynmap_addon_path = ::File.join pack_addon_dir, 'dynmap'
-
-directory dynmap_addon_path do
-  owner forge_user
-  group forge_group
-  recursive true
-  mode '750'
-end
-
-link ::File.join pack_version_server_dir, 'dynmap' do
-  to dynmap_addon_path
-end
-
-template ::File.join dynmap_addon_path, 'configuration.txt' do
+template ::File.join addon_path, 'configuration.txt' do
   source 'configuration.txt.erb'
   user forge_user
   group forge_group
   mode '644'
   variables(
-      webpage_title: "v" + pack_version + " - " + pack_name,
+      webpage_title: "v" + version + " - " + name,
   )
+  notifies :restart, "service[#{rc_script}]", :delayed if node['forge_server']['mods']['restart_on_update']
 end
 

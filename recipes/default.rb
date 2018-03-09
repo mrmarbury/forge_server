@@ -19,11 +19,26 @@
 ## Default Recipe
 #
 
+rc_script_name = node['forge_server']['rc_d']['name']
+
 chef_gem 'json' do
   compile_time false
 end
 
+chef_gem "gzipped_tar" do
+  compile_time false
+  version " ~> 0.0.4"
+end
+
 include_recipe 'forge_server::install'
+include_recipe 'forge_server::mods'
+
+service rc_script_name do
+  supports start: true, stop: true, restart: true
+  action (node['forge_server']['start_server'])? [:enable, :start] : [:disable]
+end
+
+include_recipe 'forge_server::auto_restart'
 
 ruby_block 'set_version_info' do
   block do
