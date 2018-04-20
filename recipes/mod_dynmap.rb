@@ -34,6 +34,7 @@ template ::File.join addon_path, 'configuration.txt' do
   mode '644'
   variables(
       webpage_title: "v" + version + " - " + name,
+      default_world: node['forge_server']['server_properties']['level_name']
   )
   notifies :restart, "service[#{rc_script}]", :delayed if node['forge_server']['mods']['restart_on_update']
 end

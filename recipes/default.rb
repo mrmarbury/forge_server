@@ -32,6 +32,8 @@ end
 
 include_recipe 'forge_server::install'
 include_recipe 'forge_server::mods'
+include_recipe 'forge_server::apache'
+include_recipe 'forge_server::forge_pack' if node['forge_server']['generate_new_forge_pack']
 
 service rc_script_name do
   supports start: true, stop: true, restart: true
@@ -42,7 +44,7 @@ include_recipe 'forge_server::auto_restart'
 
 ruby_block 'set_version_info' do
   block do
-    node.set['forge_server']['installed']['version'] = node['forge_server']['installer']['version']
+    node.normal['forge_server']['installed']['version'] = node['forge_server']['installer']['version']
   end
 end
 

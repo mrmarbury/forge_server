@@ -82,6 +82,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'file_id' => '2436231',
                                                    'server' => false,
                                                    'client' => true,
+                                                   'client_config_files' => %w( LLOverlayReloaded.cfg ),
                                                    'has_config_recipe' => false,
                                                    'twitch_extra_opts' => {
                                                        "required" => true

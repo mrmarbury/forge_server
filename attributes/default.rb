@@ -88,8 +88,12 @@ default['forge_server']['name'] = 'ModdedMinecraft'
 
 default['forge_server']['start_server'] = true
 
+# Set this to true in your role/environment if you want to generate a new forge pack for dowload
+default['forge_server']['generate_new_forge_pack'] = false
+
 ## Set by Cookbook. Do NOT edit!
 default['forge_server']['installed']['forge_version'] = nil
+
 
 ## Don't change these attributes!
 default['forge_server']['base_dir'] = ::File.join node['forge_server']['user']['home'], node['forge_server']['name']

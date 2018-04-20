@@ -1,0 +1,5 @@
+<ul>
+<% @modlist.each do |mod| %>
+<li><a href="<%= mod[:url] %>"><%= mod[:comment] %></a></li>
+<% end %>
+</ul>

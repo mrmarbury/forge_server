@@ -1,0 +1,12 @@
+<html>
+<title><%= @title %></title>
+<body>
+  <h2><%= @title %></h2>
+  <div>Get the latest Twitch and Minecraft-client launcher packages here. Files named <pack>-<version>_launcher.zip are meant to be used with the vanilla Minecraft client. All other files are Twitch pack</div>
+  <ul>
+  <% @files.each do |file| %>
+    <li><a href="<%= @location_dir %><%= ::File::basename(file) %>"><%= ::File::basename(file) %></a></li>
+  <% end %>
+  </ul>
+</body>
+</html>
