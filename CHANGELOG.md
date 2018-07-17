@@ -17,4 +17,8 @@ Fixed wrong defaultworld in
 
 providing index.html
 
+## 1.0.7
+
+removed poise-monit
+
 
