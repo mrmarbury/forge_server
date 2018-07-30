@@ -53,7 +53,7 @@ An installed Forge-Server will have the following directory structure:
                                \_ backups/
                                \_ ...
                                
-/usr/local/etc/rc.d/Forgeserver
+/usr/local/etc/rc.d/forgeserver
 ```
 
 The JSON-Files cannot be delivered easily as templates since they are updated through Minecraft. 

@@ -21,9 +21,9 @@ default['forge_server']['mods']['listing'] = {
                                                    'server' => false,
                                                    'client' => true,
                                                    'has_config_recipe' => false,
-                                                    'twitch_extra_opts' => {
-                                                        "required" => true
-                                                    }
+                                                   'twitch_extra_opts' => {
+                                                     "required" => true
+                                                   }
                                                },
                                                'Aroma1997Core' => {
                                                    'comment' => 'Aroma1997Core (by Aroma1997)',
