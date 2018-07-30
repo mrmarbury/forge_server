@@ -21,4 +21,8 @@ providing index.html
 
 removed poise-monit
 
+## 1.0.8
+
+added tmux path to rc-script
+
 

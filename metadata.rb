@@ -7,7 +7,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 issues_url 'https://github.com/mrmarbury/forge_server/issues' if respond_to?(:issues_url)
 source_url 'https://github.com/mrmarbury/forge_server' if respond_to?(:source_url)
 
-version '1.0.7'
+version '1.0.8'
 
 supports 'freebsd', '>= 10.3'
 chef_version '>= 12'

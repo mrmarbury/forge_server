@@ -24,7 +24,7 @@ forge_world_name=<%= @forge_world_name %>
 eval "${rcvar}=\${${rcvar}:-'NO'}"
 
 <%= @forge_name %>_start() {
-    if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+    if $(/usr/bin/su ${forge_user} -c '/usr/local/bin/tmux has-session -t <%= @forge_name %>'); then
         echo "Server already running."
     else
         echo "Starting ${forge_server_name}..."
@@ -34,7 +34,7 @@ eval "${rcvar}=\${${rcvar}:-'NO'}"
         i=0
         while [ $i -lt 15 ]; do
             i=$(($i + 1))
-            if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+            if $(/usr/bin/su ${forge_user} -c '/usr/local/bin/tmux has-session -t <%= @forge_name %>'); then
                 echo "${forge_server_name} running."
                 break
             else
@@ -51,14 +51,14 @@ eval "${rcvar}=\${${rcvar}:-'NO'}"
 }
 
 <%= @forge_name %>_stop() {
-    if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+    if $(/usr/bin/su ${forge_user} -c '/usr/local/bin/tmux has-session -t <%= @forge_name %>'); then
         echo "Halting ${forge_server_name}."
         /usr/bin/su ${forge_user} -c "/usr/local/bin/tmux send -t <%= @forge_name %>:0.0 stop \"Enter\""
 
         i=0
         while [ $i -lt 15 ]; do
             i=$(($i + 1))
-            if $(/usr/bin/su ${forge_user} -c 'tmux has-session -t <%= @forge_name %>'); then
+            if $(/usr/bin/su ${forge_user} -c '/usr/local/bin/tmux has-session -t <%= @forge_name %>'); then
                 sleep 1
             else
                 echo "${forge_server_name} halted."
