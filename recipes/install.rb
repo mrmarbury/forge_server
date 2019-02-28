@@ -47,7 +47,7 @@ rc_script_path = ::File.join node['forge_server']['rc_d']['dir'], rc_script_name
 
 forge_jar_base = 'forge-' + forge_version
 forge_installer_jar = forge_jar_base + '-installer.jar'
-forge_universal_jar = forge_jar_base + '-universal.jar'
+forge_universal_jar = forge_jar_base + '.jar'
 
 ## These resources will be executed at compile time. So in a wrapper-Cookbook .Addon is present when needed
 group forge_group do

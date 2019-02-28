@@ -1,6 +1,8 @@
 default['forge_server']['openjdk_version'] = 8
 default['forge_server']['system_packages'] = %W( openjdk#{node['forge_server']['openjdk_version']} tmux curl bash)
 
+default['forge_server']['is_test'] = false
+
 default['forge_server']['install_base'] = 'Server'
 default['forge_server']['addon_dir'] = '.Addon'
 
@@ -80,8 +82,9 @@ default['forge_server']['server_properties']['additional_options'] = {}
 ## example: http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.2.2611/forge-1.12.2-14.23.2.2611-installer.jar
 default['forge_server']['installer']['base_url'] = 'http://files.minecraftforge.net/maven/net/minecraftforge/forge'
 ## in the form '1.12.2-14.23.2.2611'
+## and this variable will always be nil here. we set these in either the role or the wrapper
 default['forge_server']['installer']['version'] = nil
-default['forge_server']['installer']['options'] = '--installServer nogui'
+default['forge_server']['installer']['options'] = '--installServer'
 
 # This is a self-chosen name. Could be anything and is here to distinguish different Minecraft installations
 default['forge_server']['name'] = 'ModdedMinecraft'

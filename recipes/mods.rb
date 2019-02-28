@@ -35,34 +35,43 @@ rc_script = node['forge_server']['rc_d']['name']
 mod_listing = node['forge_server']['mods']['listing']
 curse_base_url = node['forge_server']['mods']['curse_base_url']
 
+directory mods_dir do
+  recursive true
+  owner forge_user
+  group forge_group
+  mode '0750'
+end
+
 #  Download URL: https://<curse_base_url>/projects/<project_id>/files/<file_id>/download
 mod_listing.each do |mod, config|
+  unless node['forge_server']['is_test'] && config['ignore_in_test']
 
-  remote_file ::File.join mods_dir, mod + '.jar' do
-    source curse_base_url + '/projects/' + config['project_id'] + '/files/' + config['file_id'] + '/download'
-    owner forge_user
-    group forge_group
-    mode '0644'
-    action :create
-    notifies :restart, "service[#{rc_script}]", :delayed if node['forge_server']['mods']['restart_on_update']
-  end
-
-  if config.has_key? 'server_addon_dir'
-
-    mod_addon_dir = config['server_addon_dir']
-    mod_addon_path = ::File.join pack_addon_dir, mod_addon_dir
-
-    directory mod_addon_path do
+    remote_file ::File.join mods_dir, mod + '.jar' do
+      source curse_base_url + '/projects/' + config['project_id'] + '/files/' + config['file_id'] + '/download'
       owner forge_user
       group forge_group
-      recursive true
-      mode '750'
+      mode '0644'
+      action :create
+      notifies :restart, "service[#{rc_script}]", :delayed if node['forge_server']['mods']['restart_on_update']
     end
 
-    link ::File.join pack_version_server_dir,  mod_addon_dir do
-      to mod_addon_path
+    if config.has_key? 'server_addon_dir'
+
+      mod_addon_dir = config['server_addon_dir']
+      mod_addon_path = ::File.join pack_addon_dir, mod_addon_dir
+
+      directory mod_addon_path do
+        owner forge_user
+        group forge_group
+        recursive true
+        mode '750'
+      end
+
+      link ::File.join pack_version_server_dir,  mod_addon_dir do
+        to mod_addon_path
+      end
     end
+
+    include_recipe 'forge_server::mod_' + mod.downcase if config['has_config_recipe']
   end
-
-  include_recipe 'forge_server::mod_' + mod.downcase if config['has_config_recipe']
 end

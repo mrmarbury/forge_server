@@ -99,11 +99,12 @@ execute 'Creating twitch-zip in apache site' do
   creates twitch_pack_path
 end
 
+# TODO: This won't find any files created during this run. Fix this!
 template apache_docroot + '/' + 'index.html' do
   source 'index.html.erb'
   variables(
       title: node['forge_server']['forge_pack']['html_greeting'],
       location_dir: node['forge_server']['forge_pack']['location_dir'],
-      files: ::Dir.glob("#{apache_docroot}/*.zip")
+      files: ::Dir.glob("#{apache_docroot}/*.zip").sort
   )
 end
