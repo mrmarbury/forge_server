@@ -9,6 +9,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'server' => false,
                                                    'client' => true,
                                                    'has_config_recipe' => false,
+                                                   'ignore' => false,
                                                    'twitch_extra_opts' => {
                                                        "required" => true
                                                    }
@@ -21,6 +22,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'server' => false,
                                                    'client' => true,
                                                    'has_config_recipe' => false,
+                                                   'ignore' => false,
                                                    'twitch_extra_opts' => {
                                                      "required" => true
                                                    }
@@ -33,6 +35,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'server' => true,
                                                    'client' => true,
                                                    'has_config_recipe' => false,
+                                                   'ignore' => false,
                                                    'twitch_extra_opts' => {
                                                        "required" => true
                                                    }
@@ -45,6 +48,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'server' => true,
                                                    'client' => true,
                                                    'has_config_recipe' => false,
+                                                   'ignore' => false,
                                                    'twitch_extra_opts' => {
                                                        "required" => true
                                                    }
@@ -58,6 +62,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'client' => false,
                                                    'server_addon_dir' => 'backups',
                                                    'has_config_recipe' => false,
+                                                   'ignore' => false,
                                                    'twitch_extra_opts' => {
                                                        "required" => true
                                                    }
@@ -71,6 +76,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'client' => false,
                                                    'has_config_recipe' => true,
                                                    'server_addon_dir' => 'dynmap',
+                                                   'ignore' => false,
                                                    'twitch_extra_opts' => {
                                                        "required" => true
                                                    }
@@ -84,6 +90,7 @@ default['forge_server']['mods']['listing'] = {
                                                    'client' => true,
                                                    'client_config_files' => %w( LLOverlayReloaded.cfg ),
                                                    'has_config_recipe' => false,
+                                                   'ignore' => false,
                                                    'twitch_extra_opts' => {
                                                        "required" => true
                                                    }

@@ -25,4 +25,7 @@ removed poise-monit
 
 added tmux path to rc-script
 
+## 1.2.0
 
+ - excludable mods in test
+ - excluding backup in test
