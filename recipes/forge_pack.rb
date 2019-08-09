@@ -105,6 +105,6 @@ template apache_docroot + '/' + 'index.html' do
   variables(
       title: node['forge_server']['forge_pack']['html_greeting'],
       location_dir: node['forge_server']['forge_pack']['location_dir'],
-      files: ::Dir.glob("#{apache_docroot}/*.zip").sort
+      files: lazy { ::Dir.glob("#{apache_docroot}/*.zip").sort }
   )
 end

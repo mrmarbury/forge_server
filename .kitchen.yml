@@ -13,7 +13,7 @@ verifier:
   name: inspec
 
 platforms:
-  - name: generic/freebsd11
+  - name: generic/freebsd12
     driver:
       network:
         - ["forwarded_port", {guest: 25565, host: 25565}]
@@ -26,12 +26,24 @@ platforms:
 suites:
   - name: default
     data_bags_path: "test/integration/default/databags"
-    run_list:
-      - recipe[forge_server::default]
     verifier:
       inspec_tests:
         - test/recipes
     attributes:
       forge_server:
         installer:
-          version: "1.12.2-14.23.2.2611"
+          version: "1.14.4-28.0.45"
+        mods:
+          listing:
+            jei:
+              comment: Just Enough Items (JEI) (by mezz)
+              version: 1.14.4-6.0.0.10
+              project_id: '238222'
+              file_id: '2757672'
+              server: false
+              client: true
+              has_config_recipe: false
+              ignore_in_test: false
+              twitch_extra_opts:
+                required: true
+

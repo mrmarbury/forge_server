@@ -25,4 +25,7 @@ removed poise-monit
 
 added tmux path to rc-script
 
+## 2.1.0
 
+ - Removing mods since they should be custom
+ - keeping apache2 5.2.1 for now since 6.0.0 introduced bugs that break freebsd apache

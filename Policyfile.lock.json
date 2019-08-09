@@ -1,0 +1,115 @@
+{
+  "revision_id": "9850af9f2a647ce60c654fbbc88792583de518a8b73e4e0aae07619a77babd42",
+  "name": "forge_server",
+  "run_list": [
+    "recipe[forge_server::default]"
+  ],
+  "included_policy_locks": [
+
+  ],
+  "cookbook_locks": {
+    "apache2": {
+      "version": "5.2.1",
+      "identifier": "4193fa5fb685da4619a6a8736217eda0a10941bd",
+      "dotted_decimal_identifier": "18458577043097050.19731451951145495.261274152288701",
+      "cache_key": "apache2-5.2.1-supermarket.chef.io",
+      "origin": "https://supermarket.chef.io:443/api/v1/cookbooks/apache2/versions/5.2.1/download",
+      "source_options": {
+        "artifactserver": "https://supermarket.chef.io:443/api/v1/cookbooks/apache2/versions/5.2.1/download",
+        "version": "5.2.1"
+      }
+    },
+    "forge_server": {
+      "version": "2.1.0",
+      "identifier": "751b9768f7862122bf5b054d1f553a87bd4634ab",
+      "dotted_decimal_identifier": "32962909390210593.9780546860031829.64354670490795",
+      "source": ".",
+      "cache_key": null,
+      "scm_info": {
+        "scm": "git",
+        "remote": "https://github.com/mrmarbury/forge_server.git",
+        "revision": "07580701d0527f6d06fa3b8021ea7e07168cf8f4",
+        "working_tree_clean": false,
+        "published": true,
+        "synchronized_remote_branches": [
+          "origin/1.13.2"
+        ]
+      },
+      "source_options": {
+        "path": "."
+      }
+    },
+    "poise": {
+      "version": "2.8.2",
+      "identifier": "5eada1fb133c83935c2ce413b8f2506e4e3cab6d",
+      "dotted_decimal_identifier": "26649559024483459.41478169451280626.88434689223533",
+      "cache_key": "poise-2.8.2-supermarket.chef.io",
+      "origin": "https://supermarket.chef.io:443/api/v1/cookbooks/poise/versions/2.8.2/download",
+      "source_options": {
+        "artifactserver": "https://supermarket.chef.io:443/api/v1/cookbooks/poise/versions/2.8.2/download",
+        "version": "2.8.2"
+      }
+    },
+    "poise-archive": {
+      "version": "1.5.0",
+      "identifier": "60d072e2d2b984baf1bf8896ab581fc9043ab1a9",
+      "dotted_decimal_identifier": "27250789614532996.52620150600805208.34948219842985",
+      "cache_key": "poise-archive-1.5.0-supermarket.chef.io",
+      "origin": "https://supermarket.chef.io:443/api/v1/cookbooks/poise-archive/versions/1.5.0/download",
+      "source_options": {
+        "artifactserver": "https://supermarket.chef.io:443/api/v1/cookbooks/poise-archive/versions/1.5.0/download",
+        "version": "1.5.0"
+      }
+    }
+  },
+  "default_attributes": {
+
+  },
+  "override_attributes": {
+
+  },
+  "solution_dependencies": {
+    "Policyfile": [
+      [
+        "apache2",
+        "= 5.2.1"
+      ],
+      [
+        "forge_server",
+        ">= 0.0.0"
+      ],
+      [
+        "poise",
+        "= 2.8.2"
+      ],
+      [
+        "poise-archive",
+        "= 1.5.0"
+      ]
+    ],
+    "dependencies": {
+      "apache2 (5.2.1)": [
+
+      ],
+      "forge_server (2.1.0)": [
+        [
+          "poise-archive",
+          "~> 1.5.0"
+        ],
+        [
+          "apache2",
+          "~> 5.2.1"
+        ]
+      ],
+      "poise (2.8.2)": [
+
+      ],
+      "poise-archive (1.5.0)": [
+        [
+          "poise",
+          "~> 2.6"
+        ]
+      ]
+    }
+  }
+}
