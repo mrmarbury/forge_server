@@ -47,11 +47,12 @@ mod_listing.each do |mod, config|
   unless node['forge_server']['is_test'] && config['ignore_in_test']
 
     remote_file ::File.join mods_dir, mod + '.jar' do
-      source curse_base_url + '/projects/' + config['project_id'] + '/files/' + config['file_id'] + '/download'
+      source curse_base_url + '/minecraft/mc-mods/' + config['project_id'] + '/download/' + config['file_id'] + '/file'
       owner forge_user
       group forge_group
       mode '0644'
-      action :create
+      action !!config['server'] ? :create : :delete
+
       notifies :restart, "service[#{rc_script}]", :delayed if node['forge_server']['mods']['restart_on_update']
     end
 
@@ -67,7 +68,7 @@ mod_listing.each do |mod, config|
         mode '750'
       end
 
-      link ::File.join pack_version_server_dir,  mod_addon_dir do
+      link ::File.join pack_version_server_dir, mod_addon_dir do
         to mod_addon_path
       end
     end

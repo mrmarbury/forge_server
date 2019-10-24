@@ -1,5 +1,5 @@
 {
-  "revision_id": "9850af9f2a647ce60c654fbbc88792583de518a8b73e4e0aae07619a77babd42",
+  "revision_id": "48d424de3311d9765d699040dd943a08da14b33bdbbe4f195b28ea3808be4ca0",
   "name": "forge_server",
   "run_list": [
     "recipe[forge_server::default]"
@@ -20,19 +20,19 @@
       }
     },
     "forge_server": {
-      "version": "2.1.0",
-      "identifier": "751b9768f7862122bf5b054d1f553a87bd4634ab",
-      "dotted_decimal_identifier": "32962909390210593.9780546860031829.64354670490795",
+      "version": "3.0.0",
+      "identifier": "7a26b037c85b123bb60330a7d9ab8ceba18ba48e",
+      "dotted_decimal_identifier": "34382485450677010.16807148443392427.154943655486606",
       "source": ".",
       "cache_key": null,
       "scm_info": {
         "scm": "git",
         "remote": "https://github.com/mrmarbury/forge_server.git",
-        "revision": "07580701d0527f6d06fa3b8021ea7e07168cf8f4",
+        "revision": "14a93320c1175abbe8525a79e2e5228cdc5ee047",
         "working_tree_clean": false,
-        "published": true,
+        "published": false,
         "synchronized_remote_branches": [
-          "origin/1.13.2"
+
         ]
       },
       "source_options": {
@@ -91,7 +91,7 @@
       "apache2 (5.2.1)": [
 
       ],
-      "forge_server (2.1.0)": [
+      "forge_server (3.0.0)": [
         [
           "poise-archive",
           "~> 1.5.0"

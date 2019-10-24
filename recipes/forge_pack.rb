@@ -55,7 +55,7 @@ version_split = node[:forge_server][:installer][:version].split('-')
 pack_version = 0
 
 run_context.cookbook_collection.each do |_,cookbook|
-  pack_version = cookbook.version if cookbook.name.eql? 'forge_server'
+  pack_version = cookbook.version if cookbook.name.eql? node['forge_server']['forge_pack']['version_cookbook']
 end
 
 raise Error, "pack_version was not set! Did you rename the forge_server Cookbook?" if pack_version == 0
